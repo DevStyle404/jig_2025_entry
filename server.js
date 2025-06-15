@@ -3,6 +3,7 @@ import { serveDir } from "jsr:@std/http/file-server";
 
 // 直前の単語を保持しておく
 let previousWord = "しりとり";
+let wordHistory = ["しりとり"];
 
 // localhostにDenoのHTTPサーバーを展開
 Deno.serve(async (_req) => {
@@ -47,8 +48,25 @@ Deno.serve(async (_req) => {
                     },
                 );
             }
-            // 同一であれば，previousWordを更新
+            // すでに使用された単語か確認
+            if (wordHistory.includes(nextWord)) {
+                // エラーを返す
+                return new Response(
+                    JSON.stringify({
+                        "errorMessage": "すでに使用された単語です",
+                        "errorCode": "10002",
+                    }),
+                    {
+                        status: 400,
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                        },
+                    },
+                );
+            }
+            // 同一であれば，previousWordを更新，wordHistoryと同期
             previousWord = nextWord;
+            wordHistory.push(nextWord);
         } // 同一でない単語の入力時に、エラーを返す
         else {
             return new Response(
