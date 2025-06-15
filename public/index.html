@@ -59,7 +59,7 @@
       const nextWordInputText = nextWordInput.value;
 
       // ひらがなチェック
-      if (!/^[\u3041-\u3093]+$/u.test(nextWordInputText)) {
+      if (!/^[\u3041-\u3096\u30fc]+$/u.test(nextWordInputText)) {
         alert("ひらがなで入力してください");
         return;
       }
