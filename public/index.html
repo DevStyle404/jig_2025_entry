@@ -17,6 +17,7 @@
   <!-- 次の文字を入力するフォーム -->
   <input id="nextWordInput" type="text" />
   <button id="nextWordSendButton">送信</button>
+  <button id="retryButton">リセット</button>
 
   <!-- JavaScriptを実行 -->
   <script>
@@ -48,11 +49,27 @@
         }
       );
 
+      // ゲームの状態を確認するフラグ
+      let gameOver = 0;
       // status: 200以外が返ってきた場合にエラーを表示
+      console.log(response.status);
       if (response.status !== 200) {
         const errorJson = await response.text();
         const errorObj = JSON.parse(errorJson);
-        alert(errorObj["errorMessage"]);
+        switch (errorObj["errorCode"]) {
+          case "10000":
+            alert("「ん」で終わる単語は使用できません");
+            gameOver = 1;
+            break;
+          case "10001":
+            alert("前の単語に続いていません");
+            break;
+        }
+      }
+      // ゲームオーバーの場合
+      if (gameOver === 1) {
+        window.location.href = "/gameover.html";
+        return;
       }
 
       const previousWord = await response.text();
@@ -63,6 +80,20 @@
       paragraph.innerHTML = `前の単語: ${previousWord}`;
       // inputタグの中身を消去する
       nextWordInput.value = "";
+    }
+
+    // リトライボタンの押下時に実行
+    document.querySelector("#retryButton").onclick = async () => {
+      if (!window.confirm("リセットします\nよろしいですか？")) {
+        return;
+      }
+      // サーバーにリセットリクエストを送信
+      await fetch("/shiritori/reset", { method: "POST" });
+      // 初期状態の取得
+      const response = await fetch("/shiritori", { method: "GET" });
+      const previousWord = await response.text();
+      document.querySelector("#previousWord").innerHTML = `前の単語: ${previousWord}`;
+      document.querySelector("#nextWordInput").value = "";
     }
   </script>
 </body>

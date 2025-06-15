@@ -11,6 +11,12 @@ Deno.serve(async (_req) => {
     const pathname = new URL(_req.url).pathname;
     console.log(`pathname: ${pathname}`);
 
+    // しりとりの状態の初期化のリクエストを処理
+    if (_req.method === "POST" && pathname === "/shiritori/reset") {
+        previousWord = "しりとり";
+        return new Response("リセットしました", { status: 200 });
+    }
+
     // GET /shiritori: 直前の単語を返す
     if (_req.method === "GET" && pathname === "/shiritori") {
         return new Response(previousWord);
@@ -25,6 +31,22 @@ Deno.serve(async (_req) => {
 
         // previousWordの末尾とnextWordの先頭が同一か確認
         if (previousWord.slice(-1) === nextWord.slice(0, 1)) {
+            // 末尾が「ん」になっている場合
+            if (nextWord.slice(-1) === "ん") {
+                // エラーを返す
+                return new Response(
+                    JSON.stringify({
+                        "errorMessage": "「ん」で終わる単語は使用できません",
+                        "errorCode": "10000",
+                    }),
+                    {
+                        status: 400,
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                        },
+                    },
+                );
+            }
             // 同一であれば，previousWordを更新
             previousWord = nextWord;
         } // 同一でない単語の入力時に、エラーを返す

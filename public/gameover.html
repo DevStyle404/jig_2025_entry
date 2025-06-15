@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameOver</title>
+  <link rel="stylesheet" href="gameover.css">
+</head>
+
+<body>
+  <h1>ゲームオーバー</h1>
+  <button id="retryButton">リトライ</button>
+
+  <script>
+    document.querySelector("#retryButton").onclick = async () => {
+      // サーバーにリセットリクエストを送信
+      await fetch("/shiritori/reset", { method: "POST" });
+      // 初期状態の取得
+      window.location.href = "/";
+    }
+  </script>
+</body>
+
+</html>
