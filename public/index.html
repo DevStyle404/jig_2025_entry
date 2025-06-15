@@ -64,6 +64,21 @@
         return;
       }
 
+      // 一文字の禁止
+      if (nextWordInputText.length < 2) {
+        alert("2文字以上の単語を入力してください");
+        return;
+      }
+
+      /*
+      本来なら，以下のようにして絵文字をチェックするが，今回はひらがな以外の入力を禁止しているため．不要
+      // 絵文字チェック
+      if ([...nextWordInputText].some(c => /\p{Emoji}/u.test(c))) {
+        alert("絵文字は使用できません");
+        return;
+      }
+      */
+
       // POST /shiritoriを実行
       // 次の単語をresponseに格納
       const response = await fetch(
