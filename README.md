@@ -18,6 +18,7 @@
 [JavaScriptで平仮名(ひらがな)を判定する](https://qiita.com/thzking/items/f07633e0ee9145a85ace)<br>
 [ハイフンに似てる文字の文字コード](https://qiita.com/ryounagaoka/items/4cf5191d1a2763667add)<br>
 [平仮名 (Unicodeのブロック)](https://ja.wikipedia.org/wiki/%E5%B9%B3%E4%BB%AE%E5%90%8D_(Unicode%E3%81%AE%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF))
+[Unicode 文字クラスエスケープ: \p{...}, \P{...}](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape)
 
 ## 仕様
 
@@ -35,6 +36,7 @@
 
 - 最初の単語がランダムに決まるようにする
 - 一文字のものや絵文字等、しりとりとして不適切な単語は入力できないようにする
+  &check;
 - ひらがな以外は入力できないようにする &check;
 - 実在しない単語は入力できないようにする
 - しりとりの単語の履歴を表示できるようにする &check;
