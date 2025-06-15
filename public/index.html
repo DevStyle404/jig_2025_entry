@@ -57,6 +57,13 @@
       const nextWordInput = document.querySelector("#nextWordInput");
       // inputの中身を取得
       const nextWordInputText = nextWordInput.value;
+
+      // ひらがなチェック
+      if (!/^[\u3041-\u3093]+$/u.test(nextWordInputText)) {
+        alert("ひらがなで入力してください");
+        return;
+      }
+
       // POST /shiritoriを実行
       // 次の単語をresponseに格納
       const response = await fetch(
