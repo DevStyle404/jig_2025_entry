@@ -15,12 +15,22 @@ Deno.serve(async (_req) => {
     // しりとりの状態の初期化のリクエストを処理
     if (_req.method === "POST" && pathname === "/shiritori/reset") {
         previousWord = "しりとり";
+        wordHistory = ["しりとり"];
         return new Response("リセットしました", { status: 200 });
     }
 
     // GET /shiritori: 直前の単語を返す
     if (_req.method === "GET" && pathname === "/shiritori") {
         return new Response(previousWord);
+    }
+
+    // GET /shiritori/history: これまでの単語の履歴を返す
+    if (_req.method === "GET" && pathname === "/shiritori/history") {
+        return new Response(JSON.stringify(wordHistory), {
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+        });
     }
 
     // POST /shiritori: 次の単語を受け取って保存する

@@ -18,9 +18,26 @@
   <input id="nextWordInput" type="text" />
   <button id="nextWordSendButton">送信</button>
   <button id="retryButton">リセット</button>
+  <h2>履歴</h2>
+  <ul id="historyList">
+    <!-- 履歴はここに追加される -->
+  </ul>
 
   <!-- JavaScriptを実行 -->
   <script>
+    // 履歴を表示する
+    async function updateHistory() {
+      const response = await fetch("shiritori/history");
+      const history = await response.json();
+      const historyList = document.getElementById("historyList");
+      historyList.innerHTML = "";
+      history.forEach((word) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = word;
+        historyList.appendChild(listItem);
+      });
+    }
+
     window.onload = async (event) => {
       // GET /shiritoriを実行
       const response = await fetch("/shiritori", { method: "GET" });
@@ -30,6 +47,8 @@
       const paragraph = document.querySelector("#previousWord");
       // 取得したタグの中身を書き換える
       paragraph.innerHTML = `前の単語: ${previousWord}`;
+      // 履歴を更新
+      await updateHistory();
     }
 
     // 送信ボタンの押下時に実行
@@ -84,6 +103,8 @@
       paragraph.innerHTML = `前の単語: ${previousWord}`;
       // inputタグの中身を消去する
       nextWordInput.value = "";
+      // 履歴を更新
+      await updateHistory();
     }
 
     // リトライボタンの押下時に実行
@@ -98,6 +119,8 @@
       const previousWord = await response.text();
       document.querySelector("#previousWord").innerHTML = `前の単語: ${previousWord}`;
       document.querySelector("#nextWordInput").value = "";
+      // 履歴を更新
+      await updateHistory();
     }
   </script>
 </body>
